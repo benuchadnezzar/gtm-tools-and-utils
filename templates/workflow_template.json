@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WorkflowSpec",
+  "type": "object",
+  "required": ["name", "status", "trigger", "environment", "steps"],
+  "properties": {
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "status": { "enum": ["draft", "building", "active", "deprecated"] },
+    "trigger": {
+      "type": "object",
+      "required": ["type", "detail"],
+      "properties": {
+        "type": { "enum": ["cli", "webhook", "schedule", "event", "manual"] },
+        "detail": { "type": "string" }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "required": ["orchestrator"],
+      "properties": {
+        "orchestrator": { "type": "string" },
+        "runtime": { "type": "string" },
+        "hosting": { "type": "string" },
+        "secrets_needed": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "type", "description"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "type": {
+            "enum": [
+              "browser_automation",
+              "api_call",
+              "script",
+              "llm_call",
+              "human_approval",
+              "data_transform",
+              "notification"
+            ]
+          },
+          "description": { "type": "string" },
+          "inputs": { "type": "object" },
+          "outputs": { "type": "object" },
+          "tooling": { "type": "string" },
+          "on_error": {
+            "type": "object",
+            "properties": {
+              "strategy": {
+                "enum": ["retry", "skip", "halt", "fallback_step"]
+              },
+              "fallback_step_id": { "type": "string" },
+              "max_retries": { "type": "integer" }
+            }
+          }
+        }
+      }
+    },
+    "data_flow": { "type": "string" },
+    "open_questions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "notes": { "type": "string" }
+  }
+}

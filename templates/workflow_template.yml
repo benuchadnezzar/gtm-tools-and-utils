@@ -1,0 +1,30 @@
+workflow:
+  name: string
+  description: string # what this accomplishes and why
+  status: draft | building | active | deprecated
+
+  trigger:
+    type: cli | webhook | schedule | event | manual
+    detail: string # e.g. "terminal command: `wf run scrape-invoices`"
+
+  environment:
+    orchestrator: string # e.g. "Windmill"
+    runtime: string # e.g. "Python 3.12, Playwright"
+    hosting: string # e.g. "homelab Pi" or "work laptop"
+    secrets_needed: [string] # names only, not values
+
+  steps:
+    - id: string
+      name: string
+      type: browser_automation | api_call | script | llm_call | human_approval | data_transform | notification
+      description: string # what this step does, in plain language
+      inputs: {} # freeform — key/value expectations
+      outputs: {} # what this step produces for later steps
+      tooling: string # e.g. "Playwright", "requests", specific library if known
+      on_error: retry | skip | halt | fallback_step_id
+
+  data_flow: string # optional prose: how data moves start to end
+
+  open_questions: [string] # things you haven't decided yet — great for LLM back-and-forth
+
+  notes: string
